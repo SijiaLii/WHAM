@@ -20,6 +20,16 @@ from lib.models.preproc.detector import DetectionModel
 from lib.models.preproc.extractor import FeatureExtractor
 from lib.models.smplify import TemporalSMPLify
 
+import torch
+
+_original_torch_load = torch.load 
+
+def safe_torch_load(*args, **kwargs):
+    kwargs['weights_only'] = False
+    return _original_torch_load(*args, **kwargs)
+
+torch.load = safe_torch_load  
+
 try: 
     from lib.models.preproc.slam import SLAMModel
     _run_global = True
